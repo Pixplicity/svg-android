@@ -99,6 +99,8 @@ public abstract class Sharp {
     private OnSvgElementListener mOnElementListener;
     private AssetManager mAssetManager;
 
+    private FontFilenameProvider mFontFilenameProvider;
+
     enum Unit {
         PERCENT("%"),
         PT("pt"),
@@ -289,6 +291,12 @@ public abstract class Sharp {
     @SuppressWarnings("unused")
     public Sharp setOnElementListener(OnSvgElementListener onElementListener) {
         mOnElementListener = onElementListener;
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public Sharp setFontFilenameProvider(FontFilenameProvider fontFilenameProvider) {
+        mFontFilenameProvider = fontFilenameProvider;
         return this;
     }
 
@@ -1416,7 +1424,7 @@ public abstract class Sharp {
             if (fontSize != null) {
                 paint.setTextSize(fontSize);
             }
-            Typeface typeface = setTypeface(atts, props, mSharp.getAssetManager(), paint.getTypeface());
+            Typeface typeface = setTypeface(atts, props, mSharp.getAssetManager(), paint.getTypeface(), mSharp.mFontFilenameProvider);
             if (typeface != null) {
                 paint.setTypeface(typeface);
             }
@@ -2273,7 +2281,7 @@ public abstract class Sharp {
             }
         }
 
-        private Typeface setTypeface(Attributes atts, Properties props, AssetManager assetManager, Typeface defaultTypeface) {
+        private Typeface setTypeface(Attributes atts, Properties props, AssetManager assetManager, Typeface defaultTypeface, FontFilenameProvider mFontFilenameProvider) {
             // Prefer a dedicated attribute
             String family = getStringAttr("font-family", atts);
             if (family == null) {
@@ -2316,7 +2324,15 @@ public abstract class Sharp {
                         }
                     }
                     // Compose a filename
-                    String typefaceFile = "fonts/" + family + ".ttf";
+                    String typefaceFile = null;
+                    if(mFontFilenameProvider != null) {
+                        typefaceFile = mFontFilenameProvider.getFontFilename(family, style, weight);
+                    }
+
+                    if(typefaceFile == null) {
+                        typefaceFile = "fonts/" + family + ".ttf";
+                    }
+
                     try {
                         plain = Typeface.createFromAsset(assetManager, typefaceFile);
                         Log.d(TAG, "loaded typeface from assets: " + typefaceFile);
