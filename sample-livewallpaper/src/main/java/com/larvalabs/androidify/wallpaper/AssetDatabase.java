@@ -211,7 +211,7 @@ public class AssetDatabase {
         try {
             Sharp sharp = Sharp.loadAsset(assetManager, file);
             if (searchColor != null) {
-                sharp.addColorReplacement(searchColor, replaceColor);
+//                sharp.addColorReplacement(searchColor, replaceColor);
             }
             return sharp.getSharpPicture();
         } catch (SvgParseException e) {
@@ -239,7 +239,7 @@ public class AssetDatabase {
         try {
             Sharp sharp = Sharp.loadResource(resources, resource);
             if (searchColor != null) {
-                sharp.addColorReplacement(searchColor, replaceColor);
+//                sharp.addColorReplacement(searchColor, replaceColor);
             }
             return sharp.getSharpPicture();
         } catch (Exception e) {

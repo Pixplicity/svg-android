@@ -5,15 +5,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.pixplicity.sharp.imageviewdemo"
         minSdkVersion 18
-        targetSdkVersion 25
-        versionCode 3
-        versionName "1.0.2"
+        targetSdkVersion 27
+        versionCode 4
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -24,10 +24,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.github.chrisbanes.photoview:library:1.2.3'
+    implementation('com.github.chrisbanes.photoview:library:1.2.3') {
+        exclude group: 'com.android.support'
+    }
 
-    compile project(':library')
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+
+    implementation project(':library')
 }
