@@ -23,7 +23,7 @@ Download [the latest AAR][download] or grab from Bintray using Gradle:
 
 **Important:** Specify the latest version from Bintray as `[VERSION_HERE]`.
 
-[download]: https://bintray.com/pixplicity/android/Sharp
+[download]: https://bintray.com/vonlisboa/pixplicity/sharp
 
 ## Sample
 
