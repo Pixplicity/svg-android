@@ -50,6 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -67,7 +68,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -1128,41 +1131,36 @@ public abstract class Sharp {
         }
     }
 
-    private static class StyleSet {
-        HashMap<String, String> styleMap = new HashMap<>();
-
-        private StyleSet(String string) {
-            String[] styles = string.split(";");
-            for (String s : styles) {
-                String[] style = s.split(":");
-                if (style.length == 2) {
-                    styleMap.put(style[0], style[1]);
-                }
-            }
-        }
-
-        public String getStyle(String name) {
-            return styleMap.get(name);
-        }
-    }
-
     private static class Properties {
 
         StyleSet mStyles = null;
         Attributes mAttrs;
+        private final String elementName;
 
-        private Properties(Attributes attrs) {
+        private Properties(Attributes attrs, String elementName, StyleSet globalStyleSet) {
             mAttrs = attrs;
             String styleAttr = getStringAttr("style", attrs);
-            if (styleAttr != null) {
-                mStyles = new StyleSet(styleAttr);
-            }
+
+            mStyles = new StyleSet.Builder()
+                    .setAttributeValue(styleAttr)
+                    .applyStyleSet(globalStyleSet)
+                    .build();
+
+            this.elementName = elementName;
         }
 
         public String getAttr(String name) {
             String v = null;
             if (mStyles != null) {
-                v = mStyles.getStyle(name);
+
+                String classAttributeValue = getStringAttr("class", mAttrs);
+
+                List<String> elementClassesList = null;
+                if (!TextUtils.isEmpty(classAttributeValue)) {
+                    elementClassesList = Arrays.asList(TextUtils.split(classAttributeValue, "\\s+"));
+                }
+
+                v = mStyles.getStyle(name, elementName, elementClassesList);
             }
             if (v == null) {
                 v = getStringAttr(name, mAttrs);
@@ -1290,6 +1288,9 @@ public abstract class Sharp {
         private void onSvgEnd() {
             mSharp.onSvgEnd(mCanvas, mBounds);
         }
+
+        private boolean recordStyleElementContent = false;
+        private StringBuffer styleElementContent = null;
 
         private <T> T onSvgElement(@Nullable String id,
                                    @NonNull T element,
@@ -1655,6 +1656,8 @@ public abstract class Sharp {
         private int hiddenLevel = 0;
         private boolean boundsMode = false;
 
+        private StyleSet globalStyleSet;
+
         private void doLimits(float x, float y) {
             if (x < mLimits.left) {
                 mLimits.left = x;
@@ -1774,6 +1777,9 @@ public abstract class Sharp {
                 mCanvas.translate(-mBounds.left, -mBounds.top);
                 //Log.d(TAG, "canvas size: " + mCanvas.getWidth() + "x" + mCanvas.getHeight());
                 onSvgStart();
+            } else if (localName.equals("style")) {
+                recordStyleElementContent = true;
+                styleElementContent = new StringBuffer();
             } else if (localName.equals("defs")) {
                 mReadingDefs = true;
             } else if (localName.equals("linearGradient")) {
@@ -1782,7 +1788,7 @@ public abstract class Sharp {
                 mGradient = doGradient(false, atts);
             } else if (localName.equals("stop")) {
                 if (mGradient != null) {
-                    Properties props = new Properties(atts);
+                    Properties props = new Properties(atts, localName, globalStyleSet);
                     float offset = props.getFloat("offset", 0);
                     int color = props.getColor("stop-color");
                     float alpha = props.getFloat("stop-opacity", 1);
@@ -1792,7 +1798,7 @@ public abstract class Sharp {
                     mGradient.mColors.add(color);
                 }
             } else if (localName.equals("g")) {
-                Properties props = new Properties(atts);
+                Properties props = new Properties(atts, localName, globalStyleSet);
                 // Check to see if this is the "bounds" layer
                 if ("bounds".equalsIgnoreCase(id)) {
                     boundsMode = true;
@@ -1873,7 +1879,7 @@ public abstract class Sharp {
                     ry = height / 2;
                 }
                 pushTransform(atts);
-                Properties props = new Properties(atts);
+                Properties props = new Properties(atts, localName, globalStyleSet);
                 mRect.set(x, y, x + width, y + height);
                 if (doFill(props, mRect)) {
                     mRect = onSvgElement(id, mRect, mRect, mFillPaint);
@@ -1897,7 +1903,7 @@ public abstract class Sharp {
                 Float x2 = getFloatAttr("x2", atts);
                 Float y1 = getFloatAttr("y1", atts);
                 Float y2 = getFloatAttr("y2", atts);
-                Properties props = new Properties(atts);
+                Properties props = new Properties(atts, localName, globalStyleSet);
                 if (doStroke(props, mRect)) {
                     pushTransform(atts);
                     mLine.set(x1, y1, x2, y2);
@@ -1923,7 +1929,7 @@ public abstract class Sharp {
                 }
                 if (centerX != null && centerY != null && radiusX != null && radiusY != null) {
                     pushTransform(atts);
-                    Properties props = new Properties(atts);
+                    Properties props = new Properties(atts, localName, globalStyleSet);
                     mRect.set(centerX - radiusX, centerY - radiusY, centerX + radiusX, centerY + radiusY);
                     if (doFill(props, mRect)) {
                         mRect = onSvgElement(id, mRect, mRect, mFillPaint);
@@ -1949,7 +1955,7 @@ public abstract class Sharp {
                     Path p = new Path();
                     if (points.size() > 1) {
                         pushTransform(atts);
-                        Properties props = new Properties(atts);
+                        Properties props = new Properties(atts, localName, globalStyleSet);
                         p.moveTo(points.get(0), points.get(1));
                         for (int i = 2; i < points.size(); i += 2) {
                             float x = points.get(i);
@@ -2000,7 +2006,7 @@ public abstract class Sharp {
                 }
                 Path p = doPath(d);
                 pushTransform(atts);
-                Properties props = new Properties(atts);
+                Properties props = new Properties(atts, localName, globalStyleSet);
                 p.computeBounds(mRect, false);
                 if (doFill(props, mRect)) {
                     p = onSvgElement(id, p, mRect, mFillPaint);
@@ -2058,6 +2064,10 @@ public abstract class Sharp {
             if (!mTextStack.isEmpty()) {
                 mTextStack.peek().setText(ch, start, length);
             }
+
+            if (recordStyleElementContent) {
+                styleElementContent.append(ch, start, length);
+            }
         }
 
         @Override
@@ -2073,6 +2083,11 @@ public abstract class Sharp {
                     onSvgEnd();
                     mPicture.endRecording();
                     break;
+                case "style":
+                    recordStyleElementContent = false;
+                    globalStyleSet = new StyleSet.Builder()
+                            .setStyleTagValue(styleElementContent.toString())
+                            .build();
                 case "text":
                 case "tspan":
                     if (!mTextStack.isEmpty()) {
@@ -2181,7 +2196,7 @@ public abstract class Sharp {
                 y = getFloatAttr("y", atts, parentText != null ? parentText.y : 0f);
                 text = null;
 
-                Properties props = new Properties(atts);
+                Properties props = new Properties(atts, "text", globalStyleSet);
                 if (doFill(props, null)) {
                     fill = new TextPaint(parentText != null && parentText.fill != null
                             ? parentText.fill
