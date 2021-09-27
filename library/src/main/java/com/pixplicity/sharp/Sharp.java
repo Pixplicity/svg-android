@@ -1257,6 +1257,7 @@ public abstract class Sharp {
 
         private Paint mFillPaint;
         private boolean mFillSet = false;
+        private int mFillColor;
         private Stack<Paint> mFillPaintStack = new Stack<>();
         private Stack<Boolean> mFillSetStack = new Stack<>();
 
@@ -1416,6 +1417,7 @@ public abstract class Sharp {
                 }
             } else {
                 if (mFillSet) {
+                    mFillPaint.setColor(mFillColor);
                     // If fill is set, inherit from parent
                     // optimization: return false if transparent
                     return mFillPaint.getColor() != Color.TRANSPARENT;
@@ -1840,6 +1842,9 @@ public abstract class Sharp {
                 doStroke(props, null);
 
                 mFillSet |= (props.getString("fill") != null);
+                if(mFillSet) {
+                    mFillColor = mFillPaint.getColor();
+                }
                 mStrokeSet |= (props.getString("stroke") != null);
 
                 SvgGroup group = new SvgGroup(id);
