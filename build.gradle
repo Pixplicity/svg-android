@@ -10,7 +10,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.2.0'
 
         // Code checks
-        classpath 'com.noveogroup.android:check:1.2.2'
+        //classpath 'com.noveogroup.android:check:1.2.2'
     }
 }
 
@@ -21,10 +21,14 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+subprojects {
+    project.ext {
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+        minSdkVersion = 21
+    }
 }
 
-subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
