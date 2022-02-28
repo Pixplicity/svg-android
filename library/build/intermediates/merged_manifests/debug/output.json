@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "applicationId": "com.larvalabs.svgandroid",
+  "variantType": "LIBRARY",
+  "elements": [
+    {
+      "outputType": {
+        "type": "MERGED_MANIFESTS"
+      },
+      "apkData": {
+        "type": "MAIN",
+        "splits": [],
+        "versionCode": 7,
+        "versionName": "1.1.3",
+        "outputFile": "library-debug.aar",
+        "fullName": "debug",
+        "baseName": "debug",
+        "dirName": ""
+      },
+      "path": "../../library_manifest/debug/AndroidManifest.xml",
+      "properties": {
+        "packageId": "com.larvalabs.svgandroid",
+        "split": ""
+      }
+    }
+  ]
+}

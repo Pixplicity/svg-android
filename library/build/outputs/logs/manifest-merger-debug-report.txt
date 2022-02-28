@@ -1,0 +1,29 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:2:1-5:38
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:2:1-5:38
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:2:1-5:38
+	package
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:2:11-45
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:5:11-36
+	xmlns:android
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:3:11-69
+	android:versionCode
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml:4:11-34
+uses-sdk
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+		ADDED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
+		INJECTED from /Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
