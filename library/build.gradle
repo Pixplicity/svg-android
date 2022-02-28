@@ -1,11 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
 android {
     compileSdkVersion 31
 
