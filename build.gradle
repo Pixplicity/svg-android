@@ -2,33 +2,30 @@
 buildscript {
     repositories {
         google()
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
-
-        // Code checks
-        classpath 'com.noveogroup.android:check:1.2.2'
-
-        // used to generate a POM file
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        classpath 'com.android.tools.build:gradle:4.2.0'
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    project.ext {
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+        minSdkVersion = 21
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
 }

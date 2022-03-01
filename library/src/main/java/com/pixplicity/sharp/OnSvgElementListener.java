@@ -40,6 +40,7 @@ public interface OnSvgElementListener {
                   @Nullable RectF bounds);
 
     <T> T onSvgElement(@Nullable String id,
+                       @NonNull String localName,
                        @NonNull T element,
                        @Nullable RectF elementBounds,
                        @NonNull Canvas canvas,
