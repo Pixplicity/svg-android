@@ -8,9 +8,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0'
-
-        // Code checks
-        //classpath 'com.noveogroup.android:check:1.2.2'
     }
 }
 

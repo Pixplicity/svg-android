@@ -5,7 +5,7 @@
 5    android:versionName="1.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="11"
+8        android:minSdkVersion="21"
 8-->/Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml
 9        android:targetSdkVersion="31" />
 9-->/Users/Homez/Workspace/blubblub/sharp/library/src/main/AndroidManifest.xml

@@ -44,15 +44,14 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Looper;
-
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -101,7 +100,8 @@ public abstract class Sharp {
     static int LOG_LEVEL = LOG_LEVEL_ERROR;
 
     @IntDef({LOG_LEVEL_ERROR, LOG_LEVEL_WARN, LOG_LEVEL_INFO})
-    public @interface LogLevel {}
+    public @interface LogLevel {
+    }
 
     private static String sAssumedUnit;
     private static HashMap<String, String> sTextDynamic = null;
@@ -1077,6 +1077,7 @@ public abstract class Sharp {
     }
 
     private <T> T onSvgElement(@Nullable String id,
+                               @NonNull String localName,
                                @NonNull T element,
                                @Nullable RectF elementBounds,
                                @NonNull Canvas canvas,
@@ -1084,7 +1085,7 @@ public abstract class Sharp {
                                @Nullable Paint paint) {
         if (mOnElementListener != null) {
             return mOnElementListener.onSvgElement(
-                    id, element, elementBounds, canvas, canvasBounds, paint);
+                    id, localName, element, elementBounds, canvas, canvasBounds, paint);
         }
         return element;
     }
@@ -1292,10 +1293,11 @@ public abstract class Sharp {
         }
 
         private <T> T onSvgElement(@Nullable String id,
+                                   @NonNull String localName,
                                    @NonNull T element,
                                    @Nullable RectF elementBounds,
                                    @Nullable Paint paint) {
-            return mSharp.onSvgElement(id, element, elementBounds, mCanvas, mBounds, paint);
+            return mSharp.onSvgElement(id, localName, element, elementBounds, mCanvas, mBounds, paint);
         }
 
         private <T> void onSvgElementDrawn(@Nullable String id,
@@ -1845,7 +1847,7 @@ public abstract class Sharp {
                 SvgGroup group = new SvgGroup(id);
                 mGroupStack.push(group);
                 // FIXME compute bounds before drawing?
-                onSvgElement(id, group, null, null);
+                onSvgElement(id, localName, group, null, null);
             } else if (!hidden && localName.equals("rect")) {
                 Float x = getFloatAttr("x", atts, 0f);
                 Float y = getFloatAttr("y", atts, 0f);
@@ -1876,7 +1878,7 @@ public abstract class Sharp {
                 Properties props = new Properties(atts);
                 mRect.set(x, y, x + width, y + height);
                 if (doFill(props, mRect)) {
-                    mRect = onSvgElement(id, mRect, mRect, mFillPaint);
+                    mRect = onSvgElement(id, localName, mRect, mRect, mFillPaint);
                     if (mRect != null) {
                         mCanvas.drawRoundRect(mRect, rx, ry, mFillPaint);
                         onSvgElementDrawn(id, mRect, mFillPaint);
@@ -1884,7 +1886,7 @@ public abstract class Sharp {
                     doLimits(mRect);
                 }
                 if (doStroke(props, mRect)) {
-                    mRect = onSvgElement(id, mRect, mRect, mStrokePaint);
+                    mRect = onSvgElement(id, localName, mRect, mRect, mStrokePaint);
                     if (mRect != null) {
                         mCanvas.drawRoundRect(mRect, rx, ry, mStrokePaint);
                         onSvgElementDrawn(id, mRect, mStrokePaint);
@@ -1902,7 +1904,7 @@ public abstract class Sharp {
                     pushTransform(atts);
                     mLine.set(x1, y1, x2, y2);
                     mRect.set(mLine);
-                    mLine = onSvgElement(id, mLine, mRect, mStrokePaint);
+                    mLine = onSvgElement(id, localName, mLine, mRect, mStrokePaint);
                     if (mLine != null) {
                         mCanvas.drawLine(mLine.left, mLine.top, mLine.right, mLine.bottom, mStrokePaint);
                         onSvgElementDrawn(id, mLine, mStrokePaint);
@@ -1926,7 +1928,7 @@ public abstract class Sharp {
                     Properties props = new Properties(atts);
                     mRect.set(centerX - radiusX, centerY - radiusY, centerX + radiusX, centerY + radiusY);
                     if (doFill(props, mRect)) {
-                        mRect = onSvgElement(id, mRect, mRect, mFillPaint);
+                        mRect = onSvgElement(id, localName, mRect, mRect, mFillPaint);
                         if (mRect != null) {
                             mCanvas.drawOval(mRect, mFillPaint);
                             onSvgElementDrawn(id, mRect, mFillPaint);
@@ -1934,7 +1936,7 @@ public abstract class Sharp {
                         doLimits(mRect);
                     }
                     if (doStroke(props, mRect)) {
-                        mRect = onSvgElement(id, mRect, mRect, mStrokePaint);
+                        mRect = onSvgElement(id, localName, mRect, mRect, mStrokePaint);
                         if (mRect != null) {
                             mCanvas.drawOval(mRect, mStrokePaint);
                             onSvgElementDrawn(id, mRect, mStrokePaint);
@@ -1962,7 +1964,7 @@ public abstract class Sharp {
                         }
                         p.computeBounds(mRect, false);
                         if (doFill(props, mRect)) {
-                            p = onSvgElement(id, p, mRect, mFillPaint);
+                            p = onSvgElement(id, localName, p, mRect, mFillPaint);
                             if (p != null) {
                                 mCanvas.drawPath(p, mFillPaint);
                                 onSvgElementDrawn(id, p, mFillPaint);
@@ -1970,7 +1972,7 @@ public abstract class Sharp {
                             doLimits(mRect);
                         }
                         if (doStroke(props, mRect)) {
-                            p = onSvgElement(id, p, mRect, mStrokePaint);
+                            p = onSvgElement(id, localName, p, mRect, mStrokePaint);
                             if (p != null) {
                                 mCanvas.drawPath(p, mStrokePaint);
                                 onSvgElementDrawn(id, p, mStrokePaint);
@@ -2003,7 +2005,7 @@ public abstract class Sharp {
                 Properties props = new Properties(atts);
                 p.computeBounds(mRect, false);
                 if (doFill(props, mRect)) {
-                    p = onSvgElement(id, p, mRect, mFillPaint);
+                    p = onSvgElement(id, localName, p, mRect, mFillPaint);
                     if (p != null) {
                         mCanvas.drawPath(p, mFillPaint);
                         onSvgElementDrawn(id, p, mFillPaint);
@@ -2011,7 +2013,7 @@ public abstract class Sharp {
                     doLimits(mRect);
                 }
                 if (doStroke(props, mRect)) {
-                    p = onSvgElement(id, p, mRect, mStrokePaint);
+                    p = onSvgElement(id, localName, p, mRect, mStrokePaint);
                     if (p != null) {
                         mCanvas.drawPath(p, mStrokePaint);
                         onSvgElementDrawn(id, p, mStrokePaint);
@@ -2287,7 +2289,7 @@ public abstract class Sharp {
 
             private void drawText(Canvas canvas, SvgText text, boolean fill) {
                 TextPaint paint = fill ? text.fill : text.stroke;
-                text = onSvgElement(id, text, text.bounds, paint);
+                text = onSvgElement(id, "text", text, text.bounds, paint);
                 if (text != null) {
                     if (text.xCoords != null && text.xCoords.length > 0) {
                         // Draw each glyph separately according to their x coordinates

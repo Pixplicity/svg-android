@@ -1,0 +1,37 @@
+com/pixplicity/sharp/SvgParseException.java
+ com.pixplicity.sharp.SvgParseException
+com/pixplicity/sharp/SvgParserHelper.java
+ com.pixplicity.sharp.SvgParserHelper
+com/pixplicity/sharp/SharpDrawable.java
+ com.pixplicity.sharp.SharpDrawable
+ com.pixplicity.sharp.SharpDrawable$1
+com/pixplicity/sharp/Sharp.java
+ com.pixplicity.sharp.Sharp
+ com.pixplicity.sharp.Sharp$1
+ com.pixplicity.sharp.Sharp$10
+ com.pixplicity.sharp.Sharp$2
+ com.pixplicity.sharp.Sharp$3
+ com.pixplicity.sharp.Sharp$4
+ com.pixplicity.sharp.Sharp$5
+ com.pixplicity.sharp.Sharp$6
+ com.pixplicity.sharp.Sharp$7
+ com.pixplicity.sharp.Sharp$8
+ com.pixplicity.sharp.Sharp$9
+ com.pixplicity.sharp.Sharp$DrawableCallback
+ com.pixplicity.sharp.Sharp$Gradient
+ com.pixplicity.sharp.Sharp$LogLevel
+ com.pixplicity.sharp.Sharp$PictureCallback
+ com.pixplicity.sharp.Sharp$Properties
+ com.pixplicity.sharp.Sharp$StyleSet
+ com.pixplicity.sharp.Sharp$SvgHandler
+ com.pixplicity.sharp.Sharp$SvgHandler$SvgGroup
+ com.pixplicity.sharp.Sharp$SvgHandler$SvgText
+ com.pixplicity.sharp.Sharp$Unit
+com/pixplicity/sharp/SvgColors.java
+ com.pixplicity.sharp.SvgColors
+com/larvalabs/svgandroid/BuildConfig.java
+ com.larvalabs.svgandroid.BuildConfig
+com/pixplicity/sharp/OnSvgElementListener.java
+ com.pixplicity.sharp.OnSvgElementListener
+com/pixplicity/sharp/SharpPicture.java
+ com.pixplicity.sharp.SharpPicture
