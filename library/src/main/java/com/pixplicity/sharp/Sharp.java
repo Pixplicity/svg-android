@@ -1750,6 +1750,14 @@ public abstract class Sharp {
                         y = parseFloat(coords[1], 0f);
                         width = parseFloat(coords[2], -1f);
                         height = parseFloat(coords[3], -1f);
+                    } else {
+                        coords = viewBox.split(",");
+                        if (coords.length == 4) {
+                            x = parseFloat(coords[0], 0f);
+                            y = parseFloat(coords[1], 0f);
+                            width = parseFloat(coords[2], -1f);
+                            height = parseFloat(coords[3], -1f);
+                        }
                     }
                 } else {
                     Float svgWidth = getFloatAttr("width", atts);
